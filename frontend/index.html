@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Free YouTube to MP4 &amp; MP3 Downloader — YT Saver</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free online YouTube to MP4 and MP3 downloader. Paste any YouTube link, choose your quality, and save the video or audio to your device. No signup, works on desktop and mobile.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Free YouTube to MP4 &amp; MP3 Downloader">
+  <meta property="og:description" content="Paste a YouTube link, pick a quality, download MP4 or MP3 in seconds. Free, no signup.">
+  <meta property="og:type" content="website">
+
+  <!-- Bootstrap 2.0.2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@2.0.2/docs/assets/css/bootstrap.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@2.0.2/docs/assets/css/bootstrap-responsive.css">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "YT Saver",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Free YouTube to MP4 and MP3 downloader."
+  }
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MP2RGFWQGH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MP2RGFWQGH');
+  </script>
+</head>
+<body>
+
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="#">YT Saver</a>
+        <ul class="nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="hero-unit">
+      <h1>YouTube Downloader</h1>
+      <p>Save any YouTube video as MP4 or extract audio as MP3 — free, fast, no signup.</p>
+    </div>
+
+    <div class="row">
+      <div class="span8 offset2">
+
+        <form id="dl-form" class="form-horizontal well" onsubmit="return false;">
+          <div id="url-group" class="control-group">
+            <input type="url" id="url" class="input-block-level" placeholder="Paste YouTube link here…" autocomplete="off">
+            <span class="help-inline" id="url-error" style="display:none;">Please enter a valid YouTube URL.</span>
+          </div>
+
+          <div class="form-actions" style="margin-top:10px;">
+            <label for="quality" style="display:inline-block; margin-right:6px;">Quality:</label>
+            <select id="quality" class="input-medium">
+              <option value="auto" selected>Auto (best)</option>
+              <option value="1080">1080p</option>
+              <option value="720">720p</option>
+              <option value="480">480p</option>
+              <option value="360">360p</option>
+              <option value="240">240p</option>
+              <option value="144">144p</option>
+            </select>
+
+            <select id="bitrate" class="input-medium" style="display:none;">
+              <option value="320">320 kbps</option>
+              <option value="192" selected>192 kbps</option>
+              <option value="128">128 kbps</option>
+            </select>
+
+            <button id="btn-mp4" class="btn btn-primary btn-large" disabled>Download MP4</button>
+            <button id="btn-mp3" class="btn btn-large" disabled>Download MP3</button>
+          </div>
+        </form>
+
+        <p class="muted" style="text-align:center;">
+          Download YouTube videos as MP4 or extract audio as MP3 in seconds.
+          Paste any YouTube link, choose your preferred quality, and save the file directly to your device.
+          Our converter is free, requires no signup, and works on desktop and mobile browsers.
+          Use it for personal, offline viewing of content you have the right to download.
+        </p>
+
+        <div id="alert" class="alert" role="alert" style="display:none;"></div>
+
+        <div id="progress-wrap" style="display:none; margin-top:20px;">
+          <div class="progress progress-striped active">
+            <div id="progress-bar" class="bar" style="width:0%;"></div>
+          </div>
+          <p class="muted" id="progress-label" style="text-align:center;">Processing…</p>
+        </div>
+
+        <div id="result" class="well" style="display:none; margin-top:20px;">
+          <div class="row-fluid">
+            <div class="span3">
+              <img id="result-thumb" src="" alt="" style="width:100%; border-radius:4px;">
+            </div>
+            <div class="span9">
+              <h4 id="result-title"></h4>
+              <p class="muted">
+                <span id="result-channel"></span> · <span id="result-duration"></span>
+              </p>
+              <a id="result-download" class="btn btn-success btn-large" href="" download>Save file</a>
+              <a id="result-reset" class="btn" href="#">Download another</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <hr>
+
+    <section id="how">
+      <h2 style="text-align:center;">How it works</h2>
+      <div class="row" style="margin-top:20px;">
+        <div class="span4" style="text-align:center;">
+          <h3>1. Paste link</h3>
+          <p>Copy a YouTube video URL from your browser or the YouTube app and paste it above.</p>
+        </div>
+        <div class="span4" style="text-align:center;">
+          <h3>2. Pick quality</h3>
+          <p>Choose the video resolution you want, or switch to MP3 to grab audio only.</p>
+        </div>
+        <div class="span4" style="text-align:center;">
+          <h3>3. Download</h3>
+          <p>Click the button, wait a few seconds, and save the file to your device.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <section id="faq">
+      <h2 style="text-align:center;">FAQ</h2>
+      <div class="accordion" id="faq-accordion" style="margin-top:20px;">
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#faq-accordion" href="#q1">Is this service free?</a>
+          </div>
+          <div id="q1" class="accordion-body collapse"><div class="accordion-inner">
+            Yes. There are no fees, no signup, and no watermarks.
+          </div></div>
+        </div>
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#faq-accordion" href="#q2">What's the maximum video length?</a>
+          </div>
+          <div id="q2" class="accordion-body collapse"><div class="accordion-inner">
+            Videos up to 30 minutes are supported. Longer videos may be rejected to keep the service fast for everyone.
+          </div></div>
+        </div>
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#faq-accordion" href="#q3">Is it legal?</a>
+          </div>
+          <div id="q3" class="accordion-body collapse"><div class="accordion-inner">
+            You are responsible for respecting copyright. Only download videos you own or have permission to download.
+          </div></div>
+        </div>
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#faq-accordion" href="#q4">Do you store my downloads?</a>
+          </div>
+          <div id="q4" class="accordion-body collapse"><div class="accordion-inner">
+            Files are deleted automatically within 30 minutes after conversion. We don't keep copies.
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <footer style="text-align:center; padding:20px 0;">
+      <p class="muted">
+        © <span id="year"></span> YT Saver ·
+        <a href="#">Terms</a> ·
+        <a href="#">Privacy</a> ·
+        <a href="#">DMCA</a>
+      </p>
+    </footer>
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@2.0.2/docs/assets/js/bootstrap.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

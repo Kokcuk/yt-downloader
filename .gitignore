@@ -1,0 +1,37 @@
+# Secrets — NEVER commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.ssh/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Frontend local config (may contain hostnames/keys)
+frontend/config.js
+
+# Build / runtime
+dist/
+build/
+*.log
+files/
+data/
