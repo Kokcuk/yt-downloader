@@ -14,10 +14,17 @@ def is_youtube_url(url: str) -> bool:
     return bool(YOUTUBE_RE.match((url or "").strip()))
 
 
+YT_EXTRACTOR_ARGS = "youtube:player_client=tv,web_safari,web"
+
+
 def fetch_info(url: str) -> dict[str, Any]:
     """Run yt-dlp -J to get metadata without downloading."""
     proc = subprocess.run(
-        ["yt-dlp", "-J", "--no-playlist", "--no-warnings", url],
+        [
+            "yt-dlp", "-J", "--no-playlist", "--no-warnings",
+            "--extractor-args", YT_EXTRACTOR_ARGS,
+            url,
+        ],
         capture_output=True,
         text=True,
         timeout=30,
@@ -59,6 +66,7 @@ def download(
             "--no-playlist",
             "--no-warnings",
             "--newline",
+            "--extractor-args", YT_EXTRACTOR_ARGS,
             "-x",
             "--audio-format", "mp3",
             "--audio-quality", f"{quality}K" if quality.isdigit() else "192K",
@@ -67,7 +75,6 @@ def download(
         ]
         target = out_dir / f"{job_id}.mp3"
     else:
-        # mp4
         if quality == "auto" or not quality.isdigit():
             fselector = "bv*+ba/b"
         else:
@@ -78,6 +85,7 @@ def download(
             "--no-playlist",
             "--no-warnings",
             "--newline",
+            "--extractor-args", YT_EXTRACTOR_ARGS,
             "-f", fselector,
             "--merge-output-format", "mp4",
             "-o", out_template,
