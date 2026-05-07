@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -14,20 +15,18 @@ def is_youtube_url(url: str) -> bool:
     return bool(YOUTUBE_RE.match((url or "").strip()))
 
 
-YT_EXTRACTOR_ARGS = "youtube:player_client=tv,web_safari,web"
+def _extractor_args() -> list[str]:
+    val = os.environ.get("YT_EXTRACTOR_ARGS", "").strip()
+    return ["--extractor-args", val] if val else []
 
 
 def fetch_info(url: str) -> dict[str, Any]:
     """Run yt-dlp -J to get metadata without downloading."""
     proc = subprocess.run(
-        [
-            "yt-dlp", "-J", "--no-playlist", "--no-warnings",
-            "--extractor-args", YT_EXTRACTOR_ARGS,
-            url,
-        ],
+        ["yt-dlp", "-J", "--no-playlist", "--no-warnings", *_extractor_args(), url],
         capture_output=True,
         text=True,
-        timeout=30,
+        timeout=60,
     )
     if proc.returncode != 0:
         raise RuntimeError(_clean_error(proc.stderr) or "Failed to fetch video info")
@@ -66,7 +65,7 @@ def download(
             "--no-playlist",
             "--no-warnings",
             "--newline",
-            "--extractor-args", YT_EXTRACTOR_ARGS,
+            *_extractor_args(),
             "-x",
             "--audio-format", "mp3",
             "--audio-quality", f"{quality}K" if quality.isdigit() else "192K",
@@ -85,7 +84,7 @@ def download(
             "--no-playlist",
             "--no-warnings",
             "--newline",
-            "--extractor-args", YT_EXTRACTOR_ARGS,
+            *_extractor_args(),
             "-f", fselector,
             "--merge-output-format", "mp4",
             "-o", out_template,

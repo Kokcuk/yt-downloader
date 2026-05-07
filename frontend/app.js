@@ -102,7 +102,7 @@
   function pollJob(jobId) {
     return new Promise(function (resolve, reject) {
       var startedAt = Date.now();
-      var TIMEOUT_MS = 120000;
+      var TIMEOUT_MS = 600000;
       function tick() {
         api('/api/jobs/' + encodeURIComponent(jobId)).then(function (job) {
           if (job.status === 'ready') return resolve(job);
