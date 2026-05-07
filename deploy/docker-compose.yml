@@ -1,0 +1,41 @@
+services:
+  backend:
+    build:
+      context: ../backend
+    image: yt-saver-backend:latest
+    restart: unless-stopped
+    expose:
+      - "8000"
+    volumes:
+      - yt_data:/data
+    environment:
+      FILES_DIR: "/data"
+      FILE_TTL_SECONDS: "1800"
+      MAX_DURATION_SECONDS: "1800"
+      MAX_CONCURRENT_JOBS: "2"
+      RATE_LIMIT_PER_HOUR: "20"
+      CORS_ORIGINS: "https://youtube-downloader.org,https://www.youtube-downloader.org"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/health').status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../frontend:/srv/frontend:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+
+volumes:
+  yt_data:
+  caddy_data:
+  caddy_config:
